@@ -5,11 +5,14 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import route from './routes/route.js';
+import db from './config/db/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
 const port = 3030;
+
+db.connect();
 
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));

@@ -8,6 +8,8 @@ router.get('/search', SiteController.search);
 router.get('/login', SiteController.login);
 router.post('/login', SiteController.postLogin);
 
+router.get('/testDB', SiteController.testDB);
+
 router.get('/', SiteController.index);
 
 export default router;
