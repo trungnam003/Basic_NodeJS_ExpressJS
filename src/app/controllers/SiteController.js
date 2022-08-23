@@ -1,4 +1,3 @@
-import TestDB from '../models/TestModel.js';
 
 class SiteController {
     // [GET] root
@@ -18,16 +17,6 @@ class SiteController {
     search(req, res) {
         let query = req.query.q;
         res.render('search', { query: query });
-    }
-
-    testDB(req, res) {
-        TestDB.find({}, function (err, test) {
-            if (!err) {
-                res.json(test);
-            } else {
-                res.status(400).json({ error: 'ERROR!' });
-            }
-        });
     }
 }
 

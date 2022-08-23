@@ -26,19 +26,21 @@ app.use(
 app.use(express.json());
 
 app.engine(
-    '.html',
+    '.hbs',
     engine({
-        extname: '.html',
+        extname: '.hbs',
         encoding: 'utf-8',
-        partialsDir: { dir: path.join(__dirname, 'resources/views/partials') },
-        layoutsDir: path.join(__dirname, 'resources/views/layouts'),
+        partialsDir: {
+            dir: path.join(__dirname, 'resources', 'views', 'partials'),
+        },
+        layoutsDir: path.join(__dirname, 'resources', 'views', 'layouts'),
     }),
 );
-app.set('view engine', '.html');
-app.set('views', path.join(__dirname, 'resources/views'));
+app.set('view engine', '.hbs');
+app.set('views', path.join(__dirname, 'resources', 'views'));
 
 route(app);
 
 app.listen(port, () => {
-    console.log(`Example app listening on port http://localhost:${port}`);
+    console.log(`App listening on port http://localhost:${port}`);
 });
