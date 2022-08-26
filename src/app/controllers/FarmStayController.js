@@ -5,7 +5,7 @@ class FarmStayController {
     // [GET] /farmstays
     index(req, res, next) {
         farmStay
-            .find({})
+            .find({}, 'name location img slug')
             .then((farmStays) => {
                 res.render('farmStays/farmStays', {
                     farmStays: mongoCvt.multiMongooseToObject(farmStays),
@@ -15,11 +15,11 @@ class FarmStayController {
     }
     // [GET] /farmstays/:slug
     show(req, res, next) {
-        farmStay.findOne({slug: req.params.slug})
-        .then(farmStay =>{
-            res.json(mongoCvt.oneMongooseToObject(farmStay))
-        })
-        
+        farmStay
+            .findOne({ slug: req.params.slug }, 'name location img slug')
+            .then((farmStay) => {
+                res.json(mongoCvt.oneMongooseToObject(farmStay));
+            });
     }
 }
 

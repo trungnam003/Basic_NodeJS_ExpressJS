@@ -1,0 +1,33 @@
+<div class='mt-4'>
+    <h4>Sửa {{farmStay.name}}</h4>
+    <form method='POST' action='?_method=PUT'>
+        <div class='form-group'>
+            <label for='exampleFormControlInput1'>Tên FarmStay</label>
+            <input
+                name='name'
+                type='text'
+                class='form-control'
+                value='{{farmStay.name}}'
+            />
+        </div>
+
+        <div class='form-group'>
+            <label for='exampleFormControlTextarea1'>Địa chỉ</label>
+            <input
+                name='location'
+                class='form-control'
+                value='{{farmStay.location}}'
+            />
+        </div>
+        <div class='form-group'>
+            <label for='exampleFormControlTextarea1'>Link ảnh</label>
+            <input
+                name='img'
+                type='text'
+                class='form-control'
+                value='{{farmStay.img}}'
+            />
+        </div>
+        <button type='submit' class='btn btn-primary'>Sửa</button>
+    </form>
+</div>
