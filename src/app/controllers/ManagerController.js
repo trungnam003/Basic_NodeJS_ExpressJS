@@ -9,13 +9,22 @@ class ManagerController {
 
     // [GET] /manager/list-farmstay
     show(req, res, next) {
-        FarmStay.find({})
-            .then((farmStays) => {
-                res.render('managers/farmStay/show', {
-                    farmStays: mongoCvt.multiMongooseToObject(farmStays),
-                });
+        let listFarmstay = FarmStay.find({});
+        
+        if(req.query.hasOwnProperty('_sort')){
+            listFarmstay.sort({
+                [req.query.column]: req.query.type
             })
-            .catch(next);
+        }
+        
+        Promise.all([FarmStay.countDocumentsDeleted(),listFarmstay])
+        .then(([countDocumentsDeleted, farmStays]) => {
+            res.render('managers/farmStay/show', {
+                countDocumentsDeleted,
+                farmStays: mongoCvt.multiMongooseToObject(farmStays),
+            });
+        })
+        .catch(next);
     }
 
     // [GET] /manager/create/farmstay
@@ -60,13 +69,52 @@ class ManagerController {
     }
 
     // [DELETE] /manager/farmstay/:id/delete
-    deleteFarmdtay(req, res, next) {
+    deleteFarmstay(req, res, next) {
+        const params = req.params;
+        FarmStay.delete({ _id: params.id })
+            .then(() => {
+                res.redirect('back');
+            })
+            .catch(next);
+    }
+    // [GET] /manager/trash/farmstay
+    trashFarmstay(req, res, next){
+        FarmStay.findDeleted({})
+            .then((farmStays) => {
+                res.render('managers/farmStay/trash', {
+                    farmStays: mongoCvt.multiMongooseToObject(farmStays),
+                });
+            })
+            .catch(next);
+    }
+    // [PATCH] /manager/farmstay/:id/restore
+    restoreFarmstay(req, res, next){
+        FarmStay.restore({_id: req.params.id})
+        .then(()=> res.redirect('back')) // trở về trang trước
+        .catch(next)
+    
+    }
+    // [DELETE] /manager/farmstay/:id/delete-force
+     deleteForceFarmstay(req, res, next) {
         const params = req.params;
         FarmStay.deleteOne({ _id: params.id })
             .then(() => {
                 res.redirect('back');
             })
             .catch(next);
+    }
+    // [POST] /manager/handle-action/farmstay
+    handleAction(req, res, next){
+        const body = req.body;
+        switch(body.action){
+            case 'delete':
+                FarmStay.delete({_id: {$in: body.courseIds}} )
+                .then(() => {
+                    res.redirect('back');
+                })
+                .catch(next);
+                break;
+        }
     }
 }
 

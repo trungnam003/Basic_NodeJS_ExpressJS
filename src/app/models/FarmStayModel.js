@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import mongooseSlugGenerator from 'mongoose-slug-generator';
-mongoose.plugin(mongooseSlugGenerator);
+import mongooseDelete from 'mongoose-delete'
+
+
 const Schema = mongoose.Schema;
 
 const Farmstay = new Schema(
@@ -13,5 +15,10 @@ const Farmstay = new Schema(
     { timestamps: true }, // tự động thêm created và updated
 );
 
+mongoose.plugin(mongooseSlugGenerator);
+Farmstay.plugin(mongooseDelete, {
+    overrideMethods: true,
+    deletedAt: true,
+})
 export default mongoose.model('Farmstay', Farmstay); // tạo model từ schema,
 // nếu collection chưa có sẽ tự động tạo trong mongo (tự động chuyển về chữ thường và thêm s)
