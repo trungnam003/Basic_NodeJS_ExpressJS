@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import mongooseSlugGenerator from 'mongoose-slug-generator';
-import mongooseDelete from 'mongoose-delete'
+import mongooseDelete from 'mongoose-delete';
 
-
+import queryHelper from '../../helpers/mongoose/queryHelper.js';
 const Schema = mongoose.Schema;
 
 const Farmstay = new Schema(
@@ -19,6 +19,9 @@ mongoose.plugin(mongooseSlugGenerator);
 Farmstay.plugin(mongooseDelete, {
     overrideMethods: true,
     deletedAt: true,
-})
+});
+
+Farmstay.query.sortable = queryHelper.sortable; // query helper
+
 export default mongoose.model('Farmstay', Farmstay); // tạo model từ schema,
 // nếu collection chưa có sẽ tự động tạo trong mongo (tự động chuyển về chữ thường và thêm s)

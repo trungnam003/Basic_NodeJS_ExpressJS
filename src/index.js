@@ -9,6 +9,7 @@ import { fileURLToPath } from 'url';
 import route from './routes/route.js';
 import { connectMongo } from './config/db/configMongo.js';
 import sortMiddleware from './middlewares/sortMiddleware.js';
+import helperHandlebar from './helpers/handlebars/index.js';
 
 const __filename = fileURLToPath(import.meta.url); // đường dẫn đến file index.js
 const __dirname = path.dirname(__filename); // xóa index.js trong đường dẫn
@@ -31,8 +32,6 @@ app.use(express.json());
 
 app.use(methodOverride('_method')); // chuyển phương thức API
 
-
-
 app.engine(
     '.hbs',
     engine({
@@ -42,28 +41,7 @@ app.engine(
             dir: path.join(__dirname, 'resources', 'views', 'partials'),
         },
         layoutsDir: path.join(__dirname, 'resources', 'views', 'layouts'),
-        helpers: {
-            sum: (a, b) => a + b, // thêm chức năng cho file hbs
-            sortable: (field, sort)=>{
-                const sortType = field === sort.column ? sort.type : 'default';
-                const icons = {
-                    default: "oi oi-elevator",
-                    asc: "oi oi-sort-ascending",
-                    desc: "oi oi-sort-descending",
-                }
-                const types = {
-                    default: 'asc',
-                    asc: 'desc',
-                    desc: 'asc'
-                }
-                const icon = icons[sortType]
-                const type = types[sortType]
-                return (
-                `<a href="?_sort&column=${field}&type=${type}">
-                    <span class="${icon}"></span>
-                </a>` )
-            }
-        },
+        helpers: helperHandlebar,
     }),
 ); // cấu hình handlebars
 app.set('view engine', '.hbs');
